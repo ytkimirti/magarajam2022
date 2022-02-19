@@ -6,6 +6,12 @@ public class HumanSpriteController : MonoBehaviour
 {
     public Vector2 movementDirection;
     public Vector2 lookDirection;
+    public bool facing;
+
+    [Header("State")]
+    public bool isAlarmed = false;
+    public bool isMoving = false;
+    public bool isHolded = false;
 
     [Space]
 
@@ -33,6 +39,8 @@ public class HumanSpriteController : MonoBehaviour
     [Space]
     public Sprite faceSprite;
     public Sprite blinkingSprite;
+    [Space]
+    public Animator animator;
 
     void Start()
     {
@@ -41,11 +49,14 @@ public class HumanSpriteController : MonoBehaviour
 
     void Update()
     {
+        transform.localScale = new Vector3(facing ? 1 : -1, 1, 1);
         lookDirection = (CameraController.main.mousePos - (Vector2)transform.position).normalized;
 
         // Staring
 
-        faceTrans.localPosition = lookDirection * lookMagnitude;
+        Vector2 newFacePos = lookDirection * lookMagnitude;
+        newFacePos.x *= facing ? 1 : -1;
+        faceTrans.localPosition = newFacePos;
 
         // Blinking
 
@@ -66,5 +77,11 @@ public class HumanSpriteController : MonoBehaviour
                 faceRen.sprite = blinkingSprite;
             }
         }
+
+        // Update animation state
+
+        animator.SetBool("isAlarmed", isAlarmed);
+        animator.SetBool("isHolded", isHolded);
+        animator.SetBool("isMoving", isMoving);
     }
 }
