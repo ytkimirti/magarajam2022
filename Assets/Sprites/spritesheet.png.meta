@@ -14,6 +14,18 @@ TextureImporter:
   - first:
       213: -5962389079421231736
     second: hand
+  - first:
+      213: 2788568348960109317
+    second: pointer
+  - first:
+      213: 226702753830753226
+    second: holdable
+  - first:
+      213: -7921052967969465774
+    second: holding
+  - first:
+      213: -1370661682523340017
+    second: clickable
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -194,6 +206,90 @@ TextureImporter:
       bones: []
       spriteID: 88ddd6ce8b6514da0800000000000000
       internalID: -5962389079421231736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pointer
+      rect:
+        serializedVersion: 2
+        x: 238
+        y: 233
+        width: 8
+        height: 11
+      alignment: 9
+      pivot: {x: 0.25, y: 0.72727275}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5033aaf832cf2b620800000000000000
+      internalID: 2788568348960109317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: holdable
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 235
+        width: 13
+        height: 11
+      alignment: 9
+      pivot: {x: 0.4615385, y: 0.45454547}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac35fa714f8652300800000000000000
+      internalID: 226702753830753226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: holding
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 234
+        width: 14
+        height: 12
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25a502d0b44c21290800000000000000
+      internalID: -7921052967969465774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: clickable
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 233
+        width: 14
+        height: 15
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53333336}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0305f9367e6afce0800000000000000
+      internalID: -1370661682523340017
       vertices: []
       indices: 
       edges: []
