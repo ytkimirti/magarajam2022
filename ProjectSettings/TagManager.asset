@@ -38,6 +38,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BG
+    uniqueID: 1499438765
+    locked: 0
+  - name: Shadow
+    uniqueID: 2720206811
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 373287785
+    locked: 0
+  - name: Hand
+    uniqueID: 3819890927
     locked: 0
