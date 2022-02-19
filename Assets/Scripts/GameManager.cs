@@ -13,16 +13,21 @@ public class GameManager : MonoBehaviour
     public List<Human> humans;
 
     public LayerMask obstacleLayer;
-    
+
+    [Header("References")]
+    public Material defaultMaterial;
+    public Material outlineMaterial;
+
     public static GameManager main;
 
-    private void Awake() {
+    private void Awake()
+    {
         main = this;
     }
 
     void Start()
     {
-        
+
     }
 
     void Update()
@@ -49,7 +54,7 @@ public class GameManager : MonoBehaviour
             if (tries++ > 100000)
             {
                 Debug.LogError("Too many tries, skipping...");
-                break; 
+                break;
             }
         } while (Physics2D.OverlapCircleAll(randomPos, 0.4f, obstacleLayer).Length > 0);
 
