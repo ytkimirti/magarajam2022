@@ -14,14 +14,17 @@ public enum HandState
 public class Hand : MonoBehaviour
 {
     public HandState state;
-    public float height;
     public Holdable currHolded;
     public Interactable currTarget;
-    [Space]
+    [Header("Height")]
+    public float height;
     public float liftHeight;
-    // public float heightLerp;
+    public float defaultHeight;
+    public float heightLerp;
     [Space]
+    Vector2 currHoldOffset;
     public LayerMask holdableLayer;
+    public LayerMask interactableStaticLayer;
 
     [Header("References")]
     public Sprite holdableSprite;
@@ -54,12 +57,26 @@ public class Hand : MonoBehaviour
 
         if (currHolded)
         {
-            currHolded.transform.position = transform.position;
+            if (currHolded is HumanHead)
+            {
+                // ((HumanHead)currHolded).human.transform.position = currHoldOffset + (Vector2)transform.position + Vector2.up * ((HumanHead)currHolded).holdOffset;
+                ((HumanHead)currHolded).human.transform.position = (Vector2)transform.position + currHoldOffset;
+            }
+            else
+            {
+                currHolded.transform.position = (Vector2)transform.position + currHoldOffset;
+            }
         }
     }
 
     private void UpdateVisuals()
     {
+        float targetHeight = (currHolded ? liftHeight : defaultHeight);
+        height = Mathf.Lerp(height, targetHeight, Time.deltaTime * heightLerp);
+
+        if (currHolded)
+            currHolded.UpdateHeight(this);
+
         Sprite targetSprite = state switch
         {
             HandState.holdable => holdableSprite,
@@ -73,6 +90,22 @@ public class Hand : MonoBehaviour
         handShadowSpriteRen.sprite = targetSprite;
 
         handShadowSpriteRen.transform.localPosition = Vector3.down * height;
+    }
+
+    Interactable SearchForTarget(LayerMask layer)
+    {
+        Collider2D[] cols = Physics2D.OverlapPointAll(transform.position, layer);
+
+        foreach (Collider2D c in cols)
+        {
+            Interactable h = c.GetComponent<Interactable>();
+            if (h != currHolded)
+            {
+                return h;
+            }
+        }
+
+        return null;
     }
 
     private void UpdateInteractables()
@@ -89,19 +122,9 @@ public class Hand : MonoBehaviour
             currHolded.isColliding = false;
         }
 
-        Collider2D[] cols = Physics2D.OverlapPointAll(transform.position, holdableLayer);
-
-        currTarget = null;
-
-        foreach (Collider2D c in cols)
-        {
-            Interactable h = c.GetComponent<Interactable>();
-            if (h != currHolded)
-            {
-                currTarget = h;
-                break;
-            }
-        }
+        currTarget = SearchForTarget(holdableLayer);
+        if (!currTarget)
+            currTarget = SearchForTarget(interactableStaticLayer);
 
         bool isKey = Input.GetKey(KeyCode.Mouse0);
         bool isKeyDown = Input.GetKeyDown(KeyCode.Mouse0);
@@ -110,11 +133,21 @@ public class Hand : MonoBehaviour
         if (currHolded && currTarget && currTarget is Holdable)
             currTarget = null;
 
-        // If hand empty, pick one up.
-        if (isKeyDown && !currHolded && currTarget && currTarget is Holdable)
+        if (isKeyDown && !currHolded && currTarget)
         {
-            currHolded = (Holdable)currTarget;
-            currTarget = null;
+            // Picking up
+            if (currTarget is Holdable)
+            {
+                currHolded = (Holdable)currTarget;
+                currHoldOffset = currHolded.transform.position - transform.position;
+                currHolded.OnPickedUp(this);
+                currTarget = null;
+            }
+            // Clicking
+            else if (currTarget is Clickable)
+            {
+                ((Clickable)currTarget).OnClick();
+            }
         }
 
         // If hand full, drop it
@@ -127,14 +160,22 @@ public class Hand : MonoBehaviour
 
                 d.OnDrop(currHolded as Holdable);
             }
+            currHolded.OnDroppedDown(this);
             currHolded = null;
         }
 
-        // Update state
+        // Update highlighting
         if (currTarget)
         {
             currTarget.isHolded = false;
-            currTarget.isColliding = true;
+
+            if (currTarget is Droppable)
+            {
+                if (currHolded)
+                    currTarget.isColliding = ((Droppable)currTarget).IsValidItem(currHolded);
+            }
+            else
+                currTarget.isColliding = true;
         }
 
         if (currHolded)

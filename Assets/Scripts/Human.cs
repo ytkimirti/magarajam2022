@@ -5,7 +5,7 @@ using UnityEngine;
 public class Human : MonoBehaviour
 {
     [Header("State")]
-    public bool isGettingHolded;
+    public bool isHolded;
     public bool isAlarmed;
     public bool facing;
     [Space]
@@ -24,7 +24,7 @@ public class Human : MonoBehaviour
     Vector2 smoothVel;
 
     [Header("References")]
-    public Collider2D collider;
+    public Collider2D col;
     public HumanSpriteController spriteController;
     public Rigidbody2D rb;
 
@@ -41,7 +41,7 @@ public class Human : MonoBehaviour
     private void OnDrawGizmos()
     {
         if (!isMoving)
-            return ;
+            return;
         Gizmos.color = isAlarmed ? Color.red : Color.cyan;
         Gizmos.DrawWireSphere(currTarget, 0.3f);
         Gizmos.DrawLine(transform.position, currTarget);
@@ -52,14 +52,15 @@ public class Human : MonoBehaviour
         UpdateTargetPos();
 
         // Update animation
-        spriteController.isHolded = isGettingHolded;
+        spriteController.isHolded = isHolded;
         spriteController.isAlarmed = isAlarmed;
         spriteController.isMoving = isMoving;
     }
 
     void UpdateTargetPos()
     {
-        if (isGettingHolded)
+        col.enabled = !isHolded;
+        if (isHolded)
             return;
 
         currDistToTarget = Vector2.Distance(transform.position, currTarget);
@@ -81,7 +82,7 @@ public class Human : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isGettingHolded)
+        if (isHolded)
         {
             isMoving = false;
             spriteController.movementDirection = Vector2.zero;

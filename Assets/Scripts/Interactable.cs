@@ -2,22 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using NaughtyAttributes;
 
 public class Interactable : MonoBehaviour
 {
+    [ReadOnly]
     public bool isColliding;
+    [ReadOnly]
     public bool isHolded;
 
     public SpriteRenderer[] highlightSprites;
     int[] defaultLayers;
     public bool changeLayers;
 
-    void Start()
+    protected virtual void Start()
     {
         defaultLayers = highlightSprites.Select(x => x.sortingOrder).ToArray();
     }
 
-    void Update()
+    protected virtual void Update()
     {
         for (int i = 0; i < highlightSprites.Length; i++)
         {
@@ -31,7 +34,12 @@ public class Interactable : MonoBehaviour
                 sprite.sortingOrder = defaultLayers[i] + (isHolded ? 10 : 0);
         }
 
-        GetComponent<SpriteRenderer>().color = isColliding ? (isHolded ? Color.green : Color.yellow) : Color.white;
+        // GetComponent<SpriteRenderer>().color = isColliding ? (isHolded ? Color.green : Color.yellow) : Color.white;
+    }
+
+    public virtual void OnCollide()
+    {
+
     }
 
 }

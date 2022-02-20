@@ -4,18 +4,19 @@ using UnityEngine;
 
 public class Droppable : Interactable
 {
-    void Start()
+    public virtual bool IsValidItem(Holdable item)
     {
-
+        return true;
     }
 
-    void Update()
-    {
-
-    }
-
-    public void OnDrop(Holdable item)
+    public virtual void OnDrop(Holdable item)
     {
         print($"Item {item.name} dropped into {name}");
+
+        if (!IsValidItem(item))
+        {
+            print("Item rejected");
+            return;
+        }
     }
 }
